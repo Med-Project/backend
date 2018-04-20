@@ -38,4 +38,4 @@ def predict():
     return responses
 
 if __name__ == '__main__':
-     app.run()
+     app.run(port=80)
