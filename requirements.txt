@@ -101,8 +101,6 @@ pyzmq==16.0.2
 qtconsole==4.3.1
 requests==2.18.4
 requests-toolbelt==0.8.0
-scikit-fuzzy==0.3
-scikit-image==0.13.1
 scikit-learn==0.19.0
 scipy==1.0.1
 seaborn==0.8
