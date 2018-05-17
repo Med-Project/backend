@@ -113,7 +113,7 @@ def getSim_w2v(vec, cnt):
         sim.append(cos_sim(vec, i))
     indexs = np.argsort(np.array(sim))
     
-    res = [(Y_topic[i]) for i in indexs[-cnt:]]
+    res = [(name2topic[Y_topic[i]], Y_topic[i]) for i in indexs[-cnt:]]
     return list(reversed(res))
 
 def getSim_siamese(vector, all_vectors, cnt):
@@ -132,12 +132,12 @@ def prediction(s, siamese):
         return -1
     
     res = getSim_w2v(text_vector, 15)
-    res = [(i, disease2url[i]) for i in res]
+    res = [(i[1], i[0], disease2url[i[1]]) for i in res]
 
     all_embed = siamese.o1.eval({siamese.x1: X_topic})
     text_embed = siamese.o1.eval({siamese.x1: text_vector.reshape([-1, 250])})
     siamese_res = getSim_siamese(text_embed, all_embed, 15)
 
-    siamese_res = [(i[0], i[1], disease2url[i[1]]) for i in siamese_res]
+    siamese_res = [(i[1], i[0], disease2url[i[1]]) for i in siamese_res]
     return (res, siamese_res)
 
