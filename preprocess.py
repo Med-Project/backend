@@ -36,7 +36,15 @@ with open(Y_path, 'r') as f:
         Y_topic.append(line.replace('\n',''))
 Y_topic = np.array(Y_topic)
 
-bolezni = pd.read_csv('bolezni.csv')
+bolezni = pd.read_csv('bolezni_urls.csv')
+
+disease2url = {}
+tmp_disease = bolezni['name'].values
+tmp_urls = bolezni['url'].values
+for i in range(len(tmp_disease)):
+    disease2url[tmp_disease[i]] = tmp_urls[i]
+del tmp_disease, tmp_urls
+
 X_categ = []
 for i in bolezni['topics']:
     toks = i.split(' $ ')
@@ -124,9 +132,12 @@ def prediction(s, siamese):
         return -1
     
     res = getSim_w2v(text_vector, 15)
+    res = [(i, disease2url[i]) for i in res]
 
     all_embed = siamese.o1.eval({siamese.x1: X_topic})
     text_embed = siamese.o1.eval({siamese.x1: text_vector.reshape([-1, 250])})
     siamese_res = getSim_siamese(text_embed, all_embed, 15)
+
+    siamese_res = [(i[0], i[1], disease2url[i[1]]) for i in siamese_res]
     return (res, siamese_res)
 
